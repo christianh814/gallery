@@ -7,6 +7,9 @@
                             Dashboard
                             <small>Subheading</small>
                         </h1>
+			<?php
+				//////
+			?>
                         <ol class="breadcrumb">
                             <li>
                                 <i class="fa fa-dashboard"></i>  <a href="/admin">Dashboard</a>
