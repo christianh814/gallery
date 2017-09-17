@@ -8,9 +8,8 @@
                             <small>Subheading</small>
                         </h1>
 			<?php
-				$the_user = User::findUserById(1);
-				$user = User::instantiation($the_user);
-				echo $user->username;
+				$found_user = User::findUserById(1);
+				echo $found_user->username;
 			?>
                         <ol class="breadcrumb">
                             <li>

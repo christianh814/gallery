@@ -11,23 +11,35 @@ class User {
 	}
 
 	public static function findUserById($user_id) {
-		return mysqli_fetch_array(self::findThisQuery("SELECT * FROM users WHERE id = '{$user_id}' "));
+		$the_result_array = self::findThisQuery("SELECT * FROM users WHERE id = '{$user_id}' ");
+		return !empty($the_result_array) ? array_shift($the_result_array) : false;
 	}
 
 	public static function findThisQuery($sql) {
 		global $db;
 		$result_set = $db->queryDB($sql);
-		return $result_set;
+		$the_object_array = array();
+		while ($row = mysqli_fetch_array($result_set)) {
+			$the_object_array[] = self::instantiation($row);
+		}
+		return $the_object_array;
 	}
 
-	public static function instantiation($found_user) {
+	public static function instantiation($the_record) {
 		$the_object = new self;
-		$the_object->id = $found_user['id'];
-		$the_object->username = $found_user['username'];
-		$the_object->password = $found_user['password'];
-		$the_object->first_name = $found_user['first_name'];
-		$the_object->last_name = $found_user['last_name'];
+		foreach ($the_record as $attrib => $value) {
+			if ($the_object->hasAttrib($attrib)) {
+				$the_object->$attrib = $value;
+			}
+		}
 		return $the_object;
+	}
+	
+	//
+
+	private function hasAttrib($attrib) {
+		$object_prop = get_object_vars($this);
+		return array_key_exists($attrib, $object_prop);
 	}
 }
 ?>
