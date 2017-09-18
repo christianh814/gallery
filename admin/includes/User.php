@@ -34,6 +34,15 @@ class User {
 		}
 		return $the_object;
 	}
+
+	public static function verifyUser($username, $password) {
+		global $db;
+		$username = $db->escapeString($username);
+		$password = $db->escapeString($password);
+		$sql = "SELECT * FROM users WHERE username = '{$username}' AND password = '{$password}' ";
+		$the_result_array = self::findThisQuery($sql);
+		return !empty($the_result_array) ? array_shift($the_result_array) : false;
+	}
 	
 	//
 

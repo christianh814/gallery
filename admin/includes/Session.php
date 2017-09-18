@@ -5,6 +5,7 @@ class Session {
 	function __construct() {
 		session_start();
 		$this->checkLogin();
+		$this->checkMsg();
 	}
 	//
 
@@ -19,10 +20,27 @@ class Session {
 		}
 	}
 
-	public function logout($user) {
+	public function logout() {
 		unset($_SESSION['user_id']);
 		unset($this->user_id);
 		$this->signed_in = false;
+	}
+
+	public function message($msg="") {
+		if(!empty($msg)) {
+			$_SESSION['message'] = $msg;
+		} else {
+			return $this->message;
+		}
+	}
+
+	public function checkMsg() {
+		if (isset($_SESSION['message'])) {
+			$this->message = $_SESSION['message'];
+			unset($this->message = $_SESSION['message']);
+		} else {
+			$this->message = "";
+		}
 	}
 
 	//
