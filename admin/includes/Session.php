@@ -9,7 +9,7 @@ class Session {
 	//
 
 	public function isSignedIn() {
-		return $this->signed_in
+		return $this->signed_in;
 	}
 
 	public function login($user) {
