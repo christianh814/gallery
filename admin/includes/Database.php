@@ -27,6 +27,10 @@ class Database {
 		return $escaped_string;
 	}
 
+	public function insertId() {
+		return mysqli_insert_id($this->con);
+	}
+
 	public function theInsertId($string) {
 		return $this->con->insert_id;
 	}
