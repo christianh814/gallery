@@ -1,5 +1,7 @@
 <?php
 class User {
+	protected static $db_table = "users";
+	protected static $db_table_fields = array('username', 'password', 'first_name', 'last_name');
 	public $id;
 	public $username;
 	public $password;
@@ -44,14 +46,15 @@ class User {
 		return !empty($the_result_array) ? array_shift($the_result_array) : false;
 	}
 
+	public function save() {
+		return isset($this->id) ? $this->update() : $this->create();
+	}
+
 	public function create() {
 		global $db;
-		$sql = "INSERT INTO users (username, password, first_name, last_name) ";
-		$sql .= "VALUES ('";
-		$sql .= $db->escapeString($this->username) . "', '";
-		$sql .= $db->escapeString($this->password) . "', '";
-		$sql .= $db->escapeString($this->first_name) . "', '";
-		$sql .= $db->escapeString($this->last_name) . "') ";
+		$properties = $this->cleanProperties();
+		$sql = "INSERT INTO " . self::$db_table . " (" . implode(",", array_keys($properties)) . ") ";
+		$sql .= "VALUES ('" . implode("', '", array_values($properties)) . "') ";
 
 		if ($db->queryDB($sql)) {
 			$this->id = $db->insertId();
@@ -64,12 +67,16 @@ class User {
 
 	public function update() {
 		global $db;
-		$sql = "UPDATE users SET ";
-		$sql .= "username = '" . $db->escapeString($this->username) . "', ";
-		$sql .= "password = '" . $db->escapeString($this->password) . "', ";
-		$sql .= "first_name = '" . $db->escapeString($this->first_name) . "', ";
-		$sql .= "last_name = '" . $db->escapeString($this->last_name) . "' ";
-		$sql .= "WHERE id = " . $db->escapeString($this->id) . " ";
+		//
+		$properties = $this->cleanProperties();
+		$properties_pairs = array();
+		foreach ($properties as $key => $val) {
+			$properties_pairs[] = "{$key}='{$val}'";
+		}
+		//
+		$sql = "UPDATE " . self::$db_table . " SET ";
+		$sql .= implode(", ", $properties_pairs);
+		$sql .= " WHERE id = " . $db->escapeString($this->id) . " ";
 		$db->queryDB($sql);
 
 		return (mysqli_affected_rows($db->con) == 1) ? true : false;
@@ -77,7 +84,7 @@ class User {
 
 	public function delete() {
 		global $db;
-		$sql = "DELETE FROM users WHERE id = '" . $db->escapeString($this->id) . "' ";
+		$sql = "DELETE FROM " . self::$db_table . " WHERE id = '" . $db->escapeString($this->id) . "' ";
 		$db->queryDB($sql);
 		return (mysqli_affected_rows($db->con) == 1) ? true : false;
 	}
@@ -87,6 +94,25 @@ class User {
 	private function hasAttrib($attrib) {
 		$object_prop = get_object_vars($this);
 		return array_key_exists($attrib, $object_prop);
+	}
+
+	//
+	protected function properties () {
+		$properties = array();
+		foreach (self::$db_table_fields as $dbf) {
+			if(property_exists($this, $dbf)) {
+				$properties[$dbf] = $this->$dbf;
+			}
+		}
+		return $properties;
+	}
+	protected function cleanProperties() {
+		global $db;
+		$clean_prop = array();
+		foreach ($this->properties() as $key => $val) {
+			$clean_prop[$key] = $db->escapeString($val);
+		}
+		return $clean_prop;
 	}
 }
 ?>

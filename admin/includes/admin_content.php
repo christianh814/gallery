@@ -9,16 +9,22 @@
                         </h1>
 			<?php
 				/*
-				$user = new User();
-				$user->username = "cucumberexpress";
-				$user->password = "123";
-				$user->first_name = "Dave";
-				$user->last_name = "Amaro";
-				$user->create();
+				$user = User::findUserById(3);
+				$user->delete();
 				*/
 
-				$user = User::findUserById(2);
-				$user->delete();
+				/*
+				$user = User::findUserById(4);
+				$user->username = "cucumberexpress";
+				$user->save();
+				*/
+
+				$user = new User();
+				$user->username = "donnyj";
+				$user->password = "123";
+				$user->first_name = "Donald";
+				$user->last_name = "Joseph";
+				$user->save();
 
 			?>
                         <ol class="breadcrumb">
