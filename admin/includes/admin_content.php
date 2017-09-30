@@ -19,12 +19,38 @@
 				$user->save();
 				*/
 
+				/*
+				$users = User::findAll();
+				foreach ($users as $user) {
+					echo $user->username;
+				}
+				*/
+
+				/*
+				$photos = Photo::findAll();
+				foreach ($photos as $photo) {
+					echo $photo->description;
+				}
+				*/
+
+				/*
 				$user = new User();
 				$user->username = "donnyj";
 				$user->password = "123";
 				$user->first_name = "Donald";
 				$user->last_name = "Joseph";
 				$user->save();
+				*/
+
+				/*
+				$photo = new Photo();
+				$photo->title = "another_test";
+				$photo->description = "yet another test";
+				$photo->filename = "photos/cucumberexpress/file.gif";
+				$photo->type = "gif";
+				$photo->size = "777";
+				$photo->save();
+				*/
 
 			?>
                         <ol class="breadcrumb">

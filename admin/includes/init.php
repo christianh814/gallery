@@ -4,4 +4,6 @@ require_once("new_config.php");
 require_once("Database.php");
 require_once("User.php");
 require_once("Session.php");
+require_once("DBObject.php");
+require_once("Photo.php");
 ?>
