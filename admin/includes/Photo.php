@@ -22,6 +22,20 @@ class Photo extends DBObject {
 		UPLOAD_ERR_EXTENSION => "A PHP extension stopped the file upload"
 	);
 	//
+	public function setFile($file) {
+		if (empty($file) || !$file || !is_array($file)) {
+			$this->errors[] = "No file was uploaded";
+			return false;
+		} elseif ($file['error'] !== 0) {
+			$this->errors[] = $this->upload_errors_array[$file['error']];
+			return false;
+		} else {
+			$this->filename = basename($file['name']);
+			$this->tmp_path = basename($file['tmp_name']);
+			$this->type = basename($file['type']);
+			$this->size = basename($file['size']);
+		}
+	}
 
 
 }
